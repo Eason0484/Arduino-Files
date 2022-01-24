@@ -1,6 +1,3 @@
-/*
- * Author: 刘品言
- */
 const int DATAPIN = 12;
 const int CLOCKPIN = 13;
 const int LATCHPIN = 14;
@@ -49,10 +46,10 @@ void GetKeyState()
 void DisplayNum(int num)
 {
     int results[4];
-    results[0] = num / 1000;
-    num = num % 1000;
-    results[1] = num / 100;
-    num = num % 100;
+    results[0] = num / 600;
+    num = num % 600;
+    results[1] = num / 60;
+    num = num % 60;
     results[2] = num / 10;
     results[3] = num % 10;
     for (int i = 0; i <= 3; i++)

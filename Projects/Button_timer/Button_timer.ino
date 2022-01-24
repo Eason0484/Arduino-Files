@@ -5,6 +5,7 @@ const int KEYPIN = 4;
 int preKeyVal = 0;
 int preKeyState = 1;
 bool keyFlag = 0;
+bool keyState = keyFlag;
 bool countFlag = 0;
 unsigned int preTime = 0;
 int debounceDelay = 10;
@@ -71,11 +72,11 @@ void setup()
 
 void loop()
 {
-    unsigned int currentTime = 0;
     GetKeyState();
-    if (keyFlag)
+    if (keyState != keyFlag && keyFlag == 0)
     {
         num++;
     }
+    keyState = !keyState;
     DisplayNum(num);
 }
