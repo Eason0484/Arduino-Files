@@ -1,6 +1,7 @@
 const int DATAPIN = 12;
 const int CLOCKPIN = 13;
 const int LATCHPIN = 14;
+const int POTPIN = 4;
 
 int flagShow = 0;
 unsigned long oldTime = 0;
@@ -20,7 +21,7 @@ int pic1[8] = { //Picture1
 int pic2[8] = { //Picture2
     0b11111111,
     0b11011011,
-    0b11011011,
+    0b11000011,
     0b10000001,
     0b11000011,
     0b11100111,
@@ -35,14 +36,15 @@ void setup() {
     
     digitalWrite(CLOCKPIN, LOW);
     digitalWrite(LATCHPIN, LOW);
-
-    analogSetWidth(10);
     
     Serial.begin(9600);
+
+    analogSetWidth(10);
 }
 
 void loop() {
-    if (millis() - oldTime >= 1000)
+    int potVal = analogRead(POTPIN);
+    if (millis() - oldTime >= potVal)
     {
         oldTime = millis();
         flagShow = !flagShow;
@@ -50,7 +52,7 @@ void loop() {
     for (int i = 0; i <= 7; i++)
     {
         dataRow = 1 << i;
-        if (flagShow == 1)
+        if (flagShow)
         {
             dataCol = pic1[i];
         }
@@ -58,8 +60,8 @@ void loop() {
         {
             dataCol = pic2[i];
         }
+        LCD_Display();
     }
-    LCD_Display();
 }
 
 void LCD_Display()
