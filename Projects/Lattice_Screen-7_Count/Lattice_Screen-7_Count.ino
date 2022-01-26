@@ -1,6 +1,7 @@
 const int DATAPIN = 12;
 const int CLOCKPIN = 13;
 const int LATCHPIN = 14;
+const int POTPIN = 4;
 
 int flagShow = 0;
 unsigned long oldTime = 0;
@@ -118,10 +119,12 @@ void setup() {
     digitalWrite(LATCHPIN, LOW);
     
     Serial.begin(9600);
+
+    analogSetWidth(10);
 }
 
 void loop() {
-    if (millis() - oldTime >= 1000)
+    if (millis() - oldTime >= analogRead(POTPIN))
     {
         if (flagShow >= 9)
         {
