@@ -1,8 +1,10 @@
+/*
+ * Author: 刘品言
+ */
 const int DATAPIN = 12;
 const int CLOCKPIN = 13;
 const int LATCHPIN = 14;
-const int POTPIN = 4;
-const int KEYPIN = 15;
+const int KEYPIN = 4;
 int preKeyVal = 0;
 int preKeyState = 1;
 bool keyFlag = 0;
@@ -12,6 +14,16 @@ int debounceDelay = 10;
 unsigned int num = 0;
 
 const byte NUM[] = {0xfc, 0x60, 0xda, 0xf2, 0x66, 0xb6, 0xbe, 0xe0, 0xfe, 0xf6, 0x01};
+
+void SpecialDigitDisplay(int digit, int num)
+{
+    byte val = 0;
+    bitSet(val, digit - 1);
+    shiftOut(DATAPIN, CLOCKPIN, MSBFIRST, val);
+    shiftOut(DATAPIN, CLOCKPIN, LSBFIRST, ~NUM[num]);
+    digitalWrite(LATCHPIN, HIGH);
+    digitalWrite(LATCHPIN, LOW);
+}
 
 void GetKeyState()
 {
@@ -32,16 +44,6 @@ void GetKeyState()
             }
         }
     }
-}
-
-void SpecialDigitDisplay(int digit, int num)
-{
-    byte val = 0;
-    bitSet(val, digit - 1);
-    shiftOut(DATAPIN, CLOCKPIN, MSBFIRST, val);
-    shiftOut(DATAPIN, CLOCKPIN, LSBFIRST, ~NUM[num]);
-    digitalWrite(LATCHPIN, HIGH);
-    digitalWrite(LATCHPIN, LOW);
 }
 
 void DisplayNum(int num)
@@ -65,7 +67,6 @@ void setup()
     pinMode(CLOCKPIN, OUTPUT);
     pinMode(LATCHPIN, OUTPUT);
     pinMode(KEYPIN, INPUT);
-    pinMode(POTPIN, INPUT);
 
     digitalWrite(CLOCKPIN, LOW);
     digitalWrite(LATCHPIN, LOW);
@@ -73,15 +74,20 @@ void setup()
 
 void loop()
 {
-    unsigned int currentTime = 0;
+    unsigned int currentTime = millis();
     GetKeyState();
     if (keyFlag)
     {
-        analogSetWidth(9);
+        if (countFlag == 1)
+        {
+            currentTime = millis();
+            countFlag = 0;
+        }
+        num = (millis() - currentTime) / 1000;
     }
     else
     {
-        analogSetWidth(10);
+        countFlag = 1;
     }
-    DisplayNum(analogRead(POTPIN));
+    DisplayNum(num);
 }
