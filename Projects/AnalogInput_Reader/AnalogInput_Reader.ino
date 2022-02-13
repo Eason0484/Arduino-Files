@@ -10,7 +10,7 @@ unsigned int preTime = 0;
 int debounceDelay = 10;
 unsigned int num = 0;
 
-const byte NUM[] = {0xfc, 0x60, 0xda, 0xf2, 0x66, 0xb6, 0xbe, 0xe0, 0xfe, 0xf6, 0x01};
+const byte NUM[] = { 0xfc, 0x60, 0xda, 0xf2, 0x66, 0xb6, 0xbe, 0xe0, 0xfe, 0xf6, 0x01 };
 
 void SpecialDigitDisplay(int digit, int num)
 {
@@ -31,8 +31,7 @@ void DisplayNum(int num)
     num = num % 100;
     results[2] = num / 10;
     results[3] = num % 10;
-    for (int i = 0; i <= 3; i++)
-    {
+    for (int i = 0; i <= 3; i++) {
         SpecialDigitDisplay(i + 1, results[i]);
     }
 }
